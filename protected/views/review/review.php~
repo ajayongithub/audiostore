@@ -1,0 +1,19 @@
+<?php
+/* @var $this ReviewController */
+
+?>
+	<h2>Tape No: <?php echo $fileDetails->tape_no?> <br>Set: <?php echo $fileDetails->set->set_name?> </h2>
+	<note>In order to give feedback you can either listen here or you can download the file to listen on another device.</note>
+	<br/>
+	<br/>
+<audio controls>
+<!--  <source src="horse.ogg" type="audio/ogg">-->
+  <source src="<?php echo "/audiostore/uploads/".basename($fileDetails->file_detail)?>" type="audio/ogg"/>
+  <source src="<?php echo "/audiostore/uploads/".basename($fileDetails->file_detail)?>" type="audio/mpeg"/>
+Your browser does not support the audio element.
+</audio>
+<h4>Feedback:</h4>
+<div>
+	<select><option>A</option></select>
+	<input type="button" value="Add Feedback"/>
+</div>

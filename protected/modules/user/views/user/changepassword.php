@@ -1,6 +1,6 @@
 <?php 
-$this->pageTitle = Yum::t("Change Password");
-echo '<h2>'. Yum::t('Change Password') .'</h2>';
+$this->pageTitle = Yum::t("change password");
+echo '<h2>'. Yum::t('change password') .'</h2>';
 
 $this->breadcrumbs = array(
 	Yum::t("Change password"));

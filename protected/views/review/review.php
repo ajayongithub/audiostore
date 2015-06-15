@@ -1,11 +1,13 @@
 <?php
 /* @var $this ReviewController */
-$filePath = $prefix.'_'.basename($fileDetails->file_detail) ;
+//$filePath = $prefix.'_'.basename($fileDetails->file_detail) ;
+$filePath = '/uploads/'.basename($fileDetails->file_detail) ;
 ?>
-	<h2>Tape No: <?php echo $fileDetails->tape_no?> <br>Set: <?php echo $fileDetails->set->set_name?> </h2>
+	<h2>Tape No: <?php echo $fileDetails->tape_no?><br>Set: <?php echo $fileDetails->set->set_name?> </h2>
+	<h4>File Name: <?php echo basename($fileDetails->file_detail);?></h4>
 	<?php echo '<h4>Spl Instruction for review :</h4>'.$fileDetails->remarks;?><br/>
 	<note>In order to give feedback you can either listen to the file below or 
-	     you can <a href="<?php echo Yii::app()->baseUrl."/tobereviewed/".$filePath?>">download</a> the file to hear it on another device.</note>
+	     you can <a href="<?php echo Yii::app()->baseUrl.$fileDetails->file_detail?>">download</a> the file to hear it on another device.</note>
  
 	     <br/>
 	
@@ -15,7 +17,8 @@ $filePath = $prefix.'_'.basename($fileDetails->file_detail) ;
 <!--  <source src="horse.ogg" type="audio/ogg">-->
   <!-- <source src="<?php echo "/audiostore/uploads/".basename($fileDetails->file_detail)?>" type="audio/ogg"/>-->
   <!--<source src="<?php echo "/audiostore/uploads/".basename($fileDetails->file_detail)?>" type="audio/mpeg"/>-->
-  <source src="<?php echo Yii::app()->baseUrl."/tobereviewed/".$filePath?>" type="audio/mpeg"/>
+ <!-- <source src="<?php echo Yii::app()->baseUrl."/tobereviewed/".$filePath?>" type="audio/mpeg"/>-->
+ <source src="<?php echo Yii::app()->baseUrl.$fileDetails->file_detail?>" type="audio/mpeg"/>-->
 Your browser does not support the audio element.
 </audio>
 </div>
@@ -307,7 +310,7 @@ Your browser does not support the audio element.
 				'ajax' => array(
 					'type'=>'POST',
 					'url'=>CController::createUrl("reviewFeedback/create"),
-					'update'=>'returnSet',
+					'update'=>'#returnSet',
 					'data'=>array('ReviewFeedback[problem_type]'=>'js:$("#problemType option:selected").val()',
 									'ReviewFeedback[description]'=>'js:$("#description").val()',
 									'ReviewFeedback[start_time]'=>'js:$("#startHr option:selected").val()+":"+$("#startMin option:selected").val()+":"+$("#startSec option:selected").val()',
@@ -316,7 +319,7 @@ Your browser does not support the audio element.
 
 								),
 					
-					'success'=>'function(data){		 $("#returnSet").html(data);	alert("Your feedback has been added to the list below.");}'
+					'success'=>'function(data){	            $("#returnSet").html(data);		alert("Your feedback has been added to the list below.");}'
 					)
 			));?></td>
 </tr>
@@ -360,6 +363,8 @@ $cs->registerScript(
 	});
 
 $("#completeBtn").click(function(){
+	var choice = confirm("Are you sure you want to mark the review as Completed");
+	if(choice==false) return ;
 			$.ajax({
 
 		 url: "/audiostore/tapeReviewer/markComplete",

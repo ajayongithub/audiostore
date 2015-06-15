@@ -16,6 +16,8 @@
  * @property string $problem_type
  * @property string $description
  * @property string $status
+ * @property string $eval_status
+ * @property string $eval_comment
  * @property string $remarks
  * @property string $extra
  *
@@ -39,12 +41,13 @@ abstract class BaseReviewFeedback extends AweActiveRecord {
         return array(
             array('tape_reviewer_id, start_time, problem_type, description', 'required'),
             array('tape_reviewer_id', 'numerical', 'integerOnly'=>true),
-            array('problem_type, extra', 'length', 'max'=>128),
+            array('problem_type, eval_status, extra', 'length', 'max'=>128),
             array('description, remarks', 'length', 'max'=>512),
             array('status', 'length', 'max'=>64),
+            array('eval_comment', 'length', 'max'=>256),
             array('end_time', 'safe'),
-            array('end_time, status, remarks, extra', 'default', 'setOnEmpty' => true, 'value' => null),
-            array('id, tape_reviewer_id, start_time, end_time, problem_type, description, status, remarks, extra', 'safe', 'on'=>'search'),
+            array('end_time, status, eval_status, eval_comment, remarks, extra', 'default', 'setOnEmpty' => true, 'value' => null),
+            array('id, tape_reviewer_id, start_time, end_time, problem_type, description, status, eval_status, eval_comment, remarks, extra', 'safe', 'on'=>'search'),
         );
     }
 
@@ -66,6 +69,8 @@ abstract class BaseReviewFeedback extends AweActiveRecord {
                 'problem_type' => Yii::t('app', 'Problem Type'),
                 'description' => Yii::t('app', 'Description'),
                 'status' => Yii::t('app', 'Status'),
+                'eval_status' => Yii::t('app', 'Eval Status'),
+                'eval_comment' => Yii::t('app', 'Eval Comment'),
                 'remarks' => Yii::t('app', 'Remarks'),
                 'extra' => Yii::t('app', 'Extra'),
                 'tapeReviewer' => null,
@@ -82,6 +87,8 @@ abstract class BaseReviewFeedback extends AweActiveRecord {
         $criteria->compare('problem_type', $this->problem_type, true);
         $criteria->compare('description', $this->description, true);
         $criteria->compare('status', $this->status, true);
+        $criteria->compare('eval_status', $this->eval_status, true);
+        $criteria->compare('eval_comment', $this->eval_comment, true);
         $criteria->compare('remarks', $this->remarks, true);
         $criteria->compare('extra', $this->extra, true);
 

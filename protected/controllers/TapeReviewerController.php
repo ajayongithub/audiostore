@@ -10,30 +10,30 @@ class TapeReviewerController extends AweController
 
 public function filters() {
 	return array(
-			'accessControl', 
+			'accessControl',
 			);
 }
 
 public function accessRules() {
 	return array(
 			array('allow',
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view','myMail'),
 				'roles'=>array('*'),
 				),
 			array('allow',
-					'actions'=>array('markComplete'),
+					'actions'=>array('markComplete','markEvaluated','myMail'),
 					'users'=>array('*'),
 			),
-				
-			array('allow', 
+
+			array('allow',
 				'actions'=>array('minicreate', 'create','update'),
 				'roles'=>array('UserCreator'),
 				),
-			array('allow', 
+			array('allow',
 				'actions'=>array('admin','delete','create','update','index','view'),
 				'users'=>array('admin'),
 				),
-			array('deny', 
+			array('deny',
 				'users'=>array('*'),
 				),
 			);
@@ -58,19 +58,34 @@ public function accessRules() {
 		$model = new TapeReviewer;
 
         $this->performAjaxValidation($model, 'tape-reviewer-form');
-
+                Yii::log("0.0");
         if(isset($_POST['TapeReviewer']))
 		{
+		                Yii::log("1.0");
                 if (isset($_POST['TapeReviewer']['tapeFile'])) $model->tapeFile = $_POST['TapeReviewer']['tapeFile'];
+                                Yii::log("2.0");
                 if (isset($_POST['TapeReviewer']['user'])) $model->user = $_POST['TapeReviewer']['user'];
+                Yii::log("3.0");
 			$model->attributes = $_POST['TapeReviewer'];
+			                Yii::log("4.0");
+/*			                if($model->validate()){
+    //NO ERRORS, SO WE PERFORM SAVE PROCESS
+   				// $model->save()
+						}else{
+    //TO SEE WHAT ERROR YOU HAVE
+    CVarDumper::dump($model->getErrors(),56789,true);
+    Yii::app()->end();
+    //an alternative way is to show attribute errors in view
+}*/
 			if($model->save()) {
-				$fileModel = TapeFile::model()->findByPk($model->tape_file_id) ;
-				$file = $fileModel->file_detail ;
-				$fileName = basename($file) ;
-				$prefix = $model->id ;
-				$destPath = Yii::getPathOfAlias('reviewPath') ;
-				copy($file, $destPath.DIRECTORY_SEPARATOR.$prefix.'_'.$fileName) ;
+			                Yii::log("5.0");
+				//$fileModel = TapeFile::model()->findByPk($model->tape_file_id) ;
+				//$file = $fileModel->file_detail ;
+				//$fileName = basename($file) ;
+				//$prefix = $model->id ;
+				//$destPath = Yii::getPathOfAlias('reviewPath') ;
+				//copy($file, $destPath.DIRECTORY_SEPARATOR.$prefix.'_'.$fileName) ;
+				                Yii::log("6.0");
                 $this->redirect(array('view', 'id' => $model->id));
             }
 		}
@@ -124,7 +139,7 @@ public function accessRules() {
 			$prefix = $model->id ;
 			$destPath = Yii::getPathOfAlias('reviewPath') ;
 			//copy($file, $destPath.DIRECTORY_SEPARATOR.$prefix.'_'.$fileName) ;
-			unlink($destPath.DIRECTORY_SEPARATOR.$prefix.'_'.$fileName) ;
+			//unlink($destPath.DIRECTORY_SEPARATOR.$prefix.'_'.$fileName) ;
 			// we only allow deletion via POST request
 			$this->loadModel($id)->delete();
 
@@ -154,10 +169,32 @@ public function accessRules() {
 		$retVal = new stdClass();
 		if($model->save()){
 			$retVal->s = 1 ;
+      $subject="Review Completed by ".Yii::app()->user->name ;
+      $body="Tape Review for ".$model->tapeFile->file_detail." has been completed. ";
+      $this->sendMail($subject,$body);
 		}else $retVal->s = -1 ;
 		echo json_encode($retVal) ;
-		
+
 	}
+
+  public function actionMarkEvaluated(){
+//		echo "To Be Completed";
+    $model = TapeReviewer::model()->findByPk($_POST['TapeReviewer']['id']) ;
+    $model->eval_status =$_POST['TapeReviewer']['eval_status'] ;
+    $retVal = new stdClass();
+    if($model->save()){
+      $retVal->s = 1 ;
+      $subject="Evaluation Completed by ".Yii::app()->user->name ;
+      $body="Tape Evalaution for ".$model->tapeFile->file_detail." has been completed. ".
+      " recommended action:".$model->eval_status ;
+      $this->sendMail($subject,$body);
+    }else{
+     $retVal->error = CVarDumper::dumpAsString($model->errors);
+     $retVal->s = -1 ;
+   }
+    echo json_encode($retVal) ;
+
+  }
 	/**
 	 * Manages all models.
 	 */
@@ -171,6 +208,23 @@ public function accessRules() {
 		$this->render('admin', array(
 			'model' => $model,
 		));
+	}
+	public function sendMail($subject,$body){
+		$to      = 'contactus@radhanikunj.com,admin@radhanikunj.com';
+		$subject = $subject ;
+		$message = $body;
+		$headers = 'From: admin@radhanikunj.com' . "\r\n" .
+			    'Reply-To: admin@radhanikunj.com' . "\r\n" .
+			    'X-Mailer: PHP/' . phpversion();
+		Yii::import('ext.runactions.components.ERunActions');
+
+		//	if (ERunActions::runBackground())
+		//	{
+				mail($to, $subject, $message, $headers);
+				Yii::log("Mail Sent SUBJECT:".$subject."BODY:".$body);
+		//	}else{
+		//		Yii::log("Mail Could Not Be Sent SUBJECT:".$subject."BODY:".$body);
+		//	}
 	}
 
 	/**

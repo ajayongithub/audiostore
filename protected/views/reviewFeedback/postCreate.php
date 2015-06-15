@@ -1,12 +1,13 @@
 <h4>List of Feedback Points submitted:</h4>
 <?php 
 $dProvider = $model->search();
+$dProvider->pagination->pageSize = $model->count();
 //$dPriver->pagination = array('pageSize' => 100);
 $this->widget('bootstrap.widgets.TbGridView',array(
     'id' => 'review-feedback-grid',
     'type' => 'striped condensed',
     'dataProvider' => $dProvider,
-    'filter' => $model,
+   // 'filter' => $model,
 		
     'columns' => array(
 //        'id',

@@ -16,9 +16,16 @@
     <?php echo $form->errorSummary($model) ?>
     <?php 
 $uploadPath = Yii::getPathOfAlias('uploadPath');
-$retResult = CFileHelper::findFiles($uploadPath, array('fileTypes'=>array('mp3'),)	);?>
+$retResult = CFileHelper::findFiles($uploadPath, array('fileTypes'=>array('mp3'),	));
+$redResult = array();
+foreach($retResult as $result){
+	$result = str_replace(Yii::app()->getBasePath().'/config/../..',"",$result);
+//	echo $result ;
+array_push($redResult,$result);
+}
+?>
                         <?php //echo $form->textFieldRow($model, 'file_detail', array('class' => 'span5', 'maxlength' => 512)) ?>
-                        <?php echo $form->dropDownListRow($model,'file_detail',array_combine(array_values($retResult), $retResult))?>
+                        <?php echo $form->dropDownListRow($model,'file_detail',array_combine(array_values($redResult), $redResult))?>
                         <?php echo $form->dropDownListRow($model, 'set', CHtml::listData(TapeSet::model()->findAll(), 'id', TapeSet::representingColumn())) ?>
                         <?php echo $form->textFieldRow($model, 'tape_no', array('class' => 'span2')) ?>
                         <?php //echo $form->textFieldRow($model, 'side', array('class' => 'span5', 'maxlength' => 32)) ?>
@@ -31,8 +38,7 @@ $retResult = CFileHelper::findFiles($uploadPath, array('fileTypes'=>array('mp3')
                         <?php echo $form->textFieldRow($model, 'keyword1', array('class' => 'span2', 'maxlength' => 32)) ?>
                         <?php echo $form->textFieldRow($model, 'keyword2', array('class' => 'span2', 'maxlength' => 32)) ?>
                         <?php echo $form->textFieldRow($model, 'keyword3', array('class' => 'span2', 'maxlength' => 32)) ?>
-                        <?php //echo $form->textFieldRow($model, 'status', array('class' => 'span2', 'maxlength' => 128)) ?>
-                        <?php echo $form->dropDownListRow($model, 'status', array('For Review'=>'For Review','Review Completed'=>'Review Completed','Repeat Recording'=>'Repeat Recording','Accepted'=>'Accepted')); ?>
+                        <?php echo $form->textFieldRow($model, 'status', array('class' => 'span2', 'maxlength' => 128)) ?>
                         <?php echo $form->textAreaRow($model, 'remarks', array('class' => 'span5', 'maxlength' => 512)) ?>
                 <div class="form-actions">
                 <?php $this->widget('bootstrap.widgets.TbButton', array(

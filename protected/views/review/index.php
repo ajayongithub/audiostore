@@ -10,6 +10,7 @@ $this->breadcrumbs=array(
 	<thead>
 	<th>Set Name</th>
 	<th>Tape No </th>
+	<th>Tape File </th>
 	<th>Status </th>
 	<th>Listen</th>
 	</thead>
@@ -23,6 +24,7 @@ $this->breadcrumbs=array(
 			echo "<tr>";
 			echo "<td> Tape Set: ".$tape_file->set->set_name."</td>";
 			echo "<td> Tape No: ".$tape_file->tape_no."</td>";
+			echo "<td> ".basename($tape_file->file_detail)."</td>";
 			echo "<td> ".$fileId->status." </td>";
 			echo '<td><a href="'.Yii::app()->createUrl("/review/review?id=".$tape_file->id.'&reviewId='.$fileId->id).'">Listen</a></td>';
 			echo "</tr>";

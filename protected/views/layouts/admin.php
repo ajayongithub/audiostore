@@ -37,7 +37,6 @@
 				array('label'=>'File Upload', 'url'=>array('/muploader')),
 				array('label'=>'Link File to Tape', 'url'=>array('/tapeFile')),
 				array('label'=>'Assign Reviewer', 'url'=>array('/tapeReviewer')),
-				array('label'=>'Listing', 'url'=>array('/listing')),
 //				array('label'=>'Cassette Handovers', 'url'=>array('/cassetteHandoverDetails')),
 				array('label'=>'Login', 'url'=>array('/user/user/login'), 'visible'=>Yii::app()->user->isGuest),
 				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)

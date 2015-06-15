@@ -13,8 +13,11 @@
  * @property string $user_id
  * @property integer $tape_file_id
  * @property string $status
+ * @property string $eval_status
+ * @property string $comments
  * @property string $remarks
  *
+ * @property ReviewFeedback[] $reviewFeedbacks
  * @property TapeFile $tapeFile
  * @property User $user
  */
@@ -29,7 +32,7 @@ abstract class BaseTapeReviewer extends AweActiveRecord {
     }
 
     public static function representingColumn() {
-        return 'tape_file_id';
+        return 'status';
     }
 
     public function rules() {
@@ -37,15 +40,16 @@ abstract class BaseTapeReviewer extends AweActiveRecord {
             array('user_id, tape_file_id', 'required'),
             array('tape_file_id', 'numerical', 'integerOnly'=>true),
             array('user_id', 'length', 'max'=>11),
-            array('status', 'length', 'max'=>128),
-            array('remarks', 'length', 'max'=>256),
-            array('status, remarks', 'default', 'setOnEmpty' => true, 'value' => null),
-            array('id, user_id, tape_file_id, status, remarks', 'safe', 'on'=>'search'),
+            array('status, eval_status', 'length', 'max'=>128),
+            array('comments, remarks', 'length', 'max'=>256),
+            array('status, eval_status, comments, remarks', 'default', 'setOnEmpty' => true, 'value' => null),
+            array('id, user_id, tape_file_id, status, eval_status, comments, remarks', 'safe', 'on'=>'search'),
         );
     }
 
     public function relations() {
         return array(
+            'reviewFeedbacks' => array(self::HAS_MANY, 'ReviewFeedback', 'tape_reviewer_id'),
             'tapeFile' => array(self::BELONGS_TO, 'TapeFile', 'tape_file_id'),
             'user' => array(self::BELONGS_TO, 'User', 'user_id'),
         );
@@ -60,7 +64,10 @@ abstract class BaseTapeReviewer extends AweActiveRecord {
                 'user_id' => Yii::t('app', 'User'),
                 'tape_file_id' => Yii::t('app', 'Tape File'),
                 'status' => Yii::t('app', 'Status'),
+                'eval_status' => Yii::t('app', 'Recommendation'),
+                'comments' => Yii::t('app', 'Comments'),
                 'remarks' => Yii::t('app', 'Remarks'),
+                'reviewFeedbacks' => null,
                 'tapeFile' => null,
                 'user' => null,
         );
@@ -73,6 +80,8 @@ abstract class BaseTapeReviewer extends AweActiveRecord {
         $criteria->compare('user_id', $this->user_id);
         $criteria->compare('tape_file_id', $this->tape_file_id);
         $criteria->compare('status', $this->status, true);
+        $criteria->compare('eval_status', $this->eval_status, true);
+        $criteria->compare('comments', $this->comments, true);
         $criteria->compare('remarks', $this->remarks, true);
 
         return new CActiveDataProvider($this, array(

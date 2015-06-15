@@ -5,7 +5,7 @@
     /** @var AweActiveForm $form */
     $form = $this->beginWidget('ext.AweCrud.components.AweActiveForm', array(
     'id' => 'tape-reviewer-form',
-    'enableAjaxValidation' => true,
+    'enableAjaxValidation' => false,
     'enableClientValidation'=> false,
     )); ?>
 
@@ -18,7 +18,7 @@
                             <?php echo $form->dropDownListRow($model, 'user', CHtml::listData(User::model()->findAll(), 'id', User::representingColumn())) ?>
                         <?php echo $form->dropDownListRow($model, 'tapeFile', CHtml::listData(TapeFile::model()->findAll(), 'id', TapeFile::representingColumn())) ?>
                         <?php //echo $form->textFieldRow($model, 'status', array('class' => 'span5', 'maxlength' => 128)) ?>
-                        <?php echo $form->dropDownListRow($model, 'status', array('For Review'=>'For Review','Review Completed'=>'Review Completed')) ?>
+                        <?php echo $form->dropDownListRow($model, 'status', array('For Review','Review Completed')) ?>
                         <?php echo $form->textFieldRow($model, 'remarks', array('class' => 'span5', 'maxlength' => 256)) ?>
                 <div class="form-actions">
                 <?php $this->widget('bootstrap.widgets.TbButton', array(

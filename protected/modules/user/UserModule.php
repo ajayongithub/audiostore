@@ -93,7 +93,7 @@ class UserModule extends CWebModule {
 
 	private $_urls=array(
 			'login'=>array('//user/user'),
-			'return'=>array('//user/user/index'),
+			'return'=>array('//site/index'),
 			'firstVisit'=>array('//user/privacy/update'),
 			'delete'=>array('//user/user/delete'),
 			// Page to go after admin logs in

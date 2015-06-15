@@ -142,7 +142,6 @@ class YumUserController extends YumController {
 									'{username}' => Yii::app()->user->name)), 'error');
 				}
 
-				//$this->redirect(Yum::module()->returnUrl);
 				$this->redirect(Yum::module()->returnUrl);
 			}
 		}

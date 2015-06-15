@@ -25,7 +25,7 @@ else{
 
 <div class="span5" >
 <audio id="prePlayer" controls >
-  <source src="<?php //echo Yii::app()->baseUrl."/tobereviewed/".$filePath?>" type="audio/mpeg"/>
+  <source src="<?php //echo Yii::app()->baseUrl."/uploads/".$filePath?>" type="audio/mpeg"/>
 Your browser does not support the audio element.
 </audio>
 </div>

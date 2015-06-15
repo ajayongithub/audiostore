@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="language" content="en" />
-<?php 
+<?php
 //Yii::app()->bootstrap->register();?>
 	<!-- blueprint CSS framework -->
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection" />
@@ -47,14 +47,23 @@
 				array('label'=>'Assign Reviewer', 'url'=>array('/tapeReviewer')),
 				array('label'=>'Listing', 'url'=>array('/listing')),
 				array('label'=>'Users', 'url'=>array('/user/user/admin')),
-//				array('label'=>'Cassette Handovers', 'url'=>array('/cassetteHandoverDetails')),
+				//array('label'=>'Feedback', 'url'=>array('tapeReviewer2/showTree')),
+				array('label'=>'Evaluate', 'url'=>array('evaluate/index')),
 				array('label'=>'Password', 'url'=>array('/user/user/changePassword')),
 				array('label'=>'Login', 'url'=>array('/user/user/login'), 'visible'=>Yii::app()->user->isGuest),
 				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 				);
-				
-			}
-			if(!Yii::app()->user->isGuest&&!Yii::app()->user->isAdmin()){
+
+			}else if(!Yii::app()->user->isGuest&&!Yii::app()->user->isAdmin()&&Yii::app()->user->hasRole('Evaluator')){
+					$itemArr = array(
+						array('label'=>'Home', 'url'=>array('/site/index')),
+						array('label'=>'Evaluate', 'url'=>array('/evaluate/index')),
+						array('label'=>'Password', 'url'=>array('/user/user/changePassword')),
+						array('label'=>'Login', 'url'=>array('/user/user/login'), 'visible'=>Yii::app()->user->isGuest),
+						array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
+
+					);
+			}else if(!Yii::app()->user->isGuest&&!Yii::app()->user->isAdmin()){
 				$itemArr = array(
 				array('label'=>'Home', 'url'=>array('/site/index')),
 				array('label'=>'Listen', 'url'=>array('/review/index')),
@@ -67,7 +76,7 @@
 		?>
 		<?php $this->widget('zii.widgets.CMenu',array(
 			'items'=>$itemArr ,
-			
+
 		)); ?>
 	</div><!-- mainmenu -->
 	<?php if(isset($this->breadcrumbs)):?>

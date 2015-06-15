@@ -2,21 +2,6 @@
 
 class ListingController extends Controller
 {
-	public function filters()
-	{
-		return array( 'accessControl' ); // perform access control for CRUD operations
-	}
-	public function accessRules() {
-		return array(
-				array('allow',
-						'actions'=>array('index'),
-						'users'=>array('admin'),
-				),
-	/*			array('deny',
-						'users'=>array('*'),
-				),*/
-		);
-	}
 
 	private function getReviewFeedback($reviewId){
 		$feedbacks = Yii::app()->db->createCommand(
@@ -46,7 +31,7 @@ class ListingController extends Controller
 		for($rIndx = 0 ; $rIndx < count($reviews) ; $rIndx++){
 			$reviewObj = array(
 		//		'text'=>'<a class="preview" href="'.Yii::app()->createUrl('/tapeFile/update/'.$fileId).'">'.$reviews[$rIndx]['username'].' '.' Status: '.$reviews[$rIndx]['status'].'</a>' ,	
-				'text'=>'<a class="preview" url="tobereviewed/'.$reviews[$rIndx]['id'].'_'.basename($fileDetails).'" href="#">'.$reviews[$rIndx]['username'].' '.' Status: '.$reviews[$rIndx]['status'].'</a>' ,	
+				'text'=>'<a class="preview" url="uploads/'.$reviews[$rIndx]['id'].'_'.basename($fileDetails).'" href="#">'.$reviews[$rIndx]['username'].' '.' Status: '.$reviews[$rIndx]['status'].'</a>' ,	
 				'children' => $this->getReviewFeedback($reviews[$rIndx]['id']),
 			);
 			array_push($retVal,$reviewObj) ;

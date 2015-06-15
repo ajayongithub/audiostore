@@ -26,7 +26,7 @@
 <div class="hint">
 <?php echo Yum::t('Leave empty or set to 0 to disable membership for this role.'); ?>
 <?php echo Yum::t('Set to >0 to enable membership for this role and set a priority.'); ?>
-<?php echp Yum::t('Higher is usually more worthy. This is used to determine downgrade possibilities.'); ?>
+<?php echo Yum::t('Higher is usually more worthy. This is used to determine downgrade possibilities.'); ?>
 </div>
 </div>
 <div class="row">
